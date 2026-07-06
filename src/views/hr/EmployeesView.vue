@@ -327,6 +327,11 @@
         <a-divider orientation="left" style="margin-top: 0; font-weight: 600;"><UserOutlined /> Thông tin cơ bản & Công việc</a-divider>
         <a-row :gutter="16">
           <a-col :span="12">
+            <a-form-item name="employeeCode" label="Mã nhân viên">
+              <a-input v-model:value="form.employeeCode" placeholder="Mã NV (VD: NV001)" :disabled="!!editingId" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
             <a-form-item name="fullName" label="Họ và tên">
               <a-input v-model:value="form.fullName" placeholder="Nguyễn Văn A" />
             </a-form-item>
@@ -369,6 +374,15 @@
               <a-select v-model:value="form.status" style="width:100%;">
                 <a-select-option value="Active">Đang làm việc</a-select-option>
                 <a-select-option value="Inactive">Nghỉ việc</a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item name="contractType" label="Loại hình công việc">
+              <a-select v-model:value="form.contractType" style="width:100%;">
+                <a-select-option value="Full-time">Chính thức (Full-time)</a-select-option>
+                <a-select-option value="Part-time">Bán thời gian (Part-time)</a-select-option>
+                <a-select-option value="Probation">Thử việc (Probation)</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -1041,6 +1055,7 @@ function filterDept(input, option) {
 }
 
 const form = reactive({
+  employeeCode: '',
   fullName: '',
   email: '',
   phone: '',
@@ -1050,6 +1065,7 @@ const form = reactive({
   hireDate: null,
   address: '',
   status: 'Active',
+  contractType: 'Full-time',
   identityNumber: '',
   taxCode: '',
   dependentsCount: 0,
@@ -1059,6 +1075,7 @@ const form = reactive({
 })
 
 const rules = {
+  employeeCode: [{ required: true, message: 'Vui lòng nhập mã nhân viên' }],
   fullName: [{ required:true, message:'Họ tên không được trống' }],
   email:    [{ required:true, type:'email', message:'Email không hợp lệ' }],
   departmentId: [{
@@ -1223,6 +1240,7 @@ function onTableChange(pag) {
 function openCreate() {
   editingId.value = null
   Object.assign(form, {
+    employeeCode: '',
     fullName: '',
     email: '',
     phone: '',
@@ -1232,6 +1250,7 @@ function openCreate() {
     hireDate: null,
     address: '',
     status: 'Active',
+    contractType: 'Full-time',
     identityNumber: '',
     taxCode: '',
     dependentsCount: 0,
@@ -1244,6 +1263,7 @@ function openCreate() {
 function openEdit(rec) {
   editingId.value = rec.id
   Object.assign(form, {
+    employeeCode: rec.employeeCode || '',
     fullName: rec.fullName || '',
     email:    rec.email || '',
     phone:    rec.phone || '',
@@ -1253,6 +1273,7 @@ function openEdit(rec) {
     hireDate: rec.hireDate ? dayjs(rec.hireDate) : null,
     address:  rec.address || '',
     status:   rec.status || 'Active',
+    contractType: rec.contractType || 'Full-time',
     identityNumber: rec.identityNumber || '',
     taxCode: rec.taxCode || '',
     dependentsCount: rec.dependentsCount || 0,
@@ -1288,6 +1309,7 @@ async function saveEmployee() {
   const payload = {
     ...form,
     hireDate: form.hireDate ? form.hireDate.toISOString() : undefined,
+    contractType: form.contractType || 'Full-time',
   }
   try {
     if (editingId.value) {

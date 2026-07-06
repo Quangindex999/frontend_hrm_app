@@ -263,6 +263,7 @@
             <a-form-item name="contractBasicSalary" label="Lương CB Hợp đồng">
               <a-input-number
                 v-model:value="form.contractBasicSalary"
+                :disabled="true"
                 :formatter="fmt"
                 :parser="prs"
                 style="width: 100%"
@@ -274,6 +275,7 @@
             <a-form-item name="salaryRatio" label="Hệ số lương">
               <a-input-number
                 v-model:value="form.salaryRatio"
+                :disabled="true"
                 :min="0.1"
                 :max="10"
                 :step="0.05"
