@@ -3,7 +3,7 @@ import axios from 'axios'
 // ─── Base URLs ────────────────────────────────────────────────────────────────
 // Trong dev: dùng Vite proxy (cùng origin, tránh CORS + HTTPS cert issue)
 // Khi gọi /api-hr/... → Vite proxy forward sang VITE_HR_URL
-const useProxy = import.meta.env.DEV
+const useProxy = true  // Luôn dùng relative path → Vite proxy (dev) hoặc Nginx proxy (production Docker)
 export const HR_BASE      = useProxy ? '/api-hr'      : (import.meta.env.VITE_HR_URL      || 'https://localhost:7084')
 export const ATTEND_BASE  = useProxy ? '/api-attend'  : (import.meta.env.VITE_ATTEND_URL  || 'https://localhost:7108')
 export const PAYROLL_BASE = useProxy ? '/api-payroll' : (import.meta.env.VITE_PAYROLL_URL || 'https://localhost:5000')
